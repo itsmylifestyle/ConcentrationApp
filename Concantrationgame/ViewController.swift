@@ -9,9 +9,13 @@ import UIKit //Controller
 
 class ViewController: UIViewController {
     
-    lazy var game = ConcentrationGame(NumberOfPairedCards: (buttonColl.count + 1) / 2)
+    private lazy var game = ConcentrationGame(NumberOfPairedCards: NumberOfPairedCards)
+    
+    var NumberOfPairedCards : Int {
+        return (buttonColl.count + 1) / 2
+    }
      
-    var touches = 0 {
+    private(set) var touches = 0 {
         didSet {
             touchLabel.text = "Touches: \(touches) "
         }
@@ -39,19 +43,18 @@ class ViewController: UIViewController {
 //        UIImage(named: "logo5")!          |
 //    ]                                     |
 //__________________________________________|
-    var emojiCollection = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨"]
+    private var emojiCollection = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨"]
     
-    var emojiDictionary = [Int : String]()
+    private var emojiDictionary = [Int : String]()
     
-    func emojiIdentifier(for card: Card) -> String {
+    private func emojiIdentifier(for card: Card) -> String {
         if emojiDictionary[card.identifier] == nil {
-            let randomIndex = Int(arc4random_uniform(UInt32(emojiCollection.count)))
-            emojiDictionary[card.identifier] = emojiCollection.remove(at: randomIndex)
+            emojiDictionary[card.identifier] = emojiCollection.remove(at: emojiCollection.count.arc4randomExtension)
         }
         return emojiDictionary[card.identifier] ?? "?"
     }
     
-    func updateViewFromModel() {
+    private func updateViewFromModel() {
         for index in buttonColl.indices {
             let button = buttonColl[index]
             let card = game.cards[index]
@@ -67,9 +70,9 @@ class ViewController: UIViewController {
     }
     
     
-    @IBOutlet var buttonColl: [UIButton]!
-    @IBOutlet weak var touchLabel: UILabel!
-    @IBAction func buttonAction(_ sender: UIButton) {
+    @IBOutlet private var buttonColl: [UIButton]!
+    @IBOutlet private weak var touchLabel: UILabel!
+    @IBAction private  func buttonAction(_ sender: UIButton) {
         touches += 1
         if let buttonIndex = buttonColl.firstIndex(of: sender) {
             game.chooseCard(at: buttonIndex)
@@ -78,3 +81,15 @@ class ViewController: UIViewController {
     }
 }
 
+
+extension Int {//It will never lead to  emergency shutdown
+    var arc4randomExtension: Int {
+        if self > 0 {
+            return Int(arc4random_uniform(UInt32(self)))
+        } else if self < 0 {
+            return -Int(arc4random_uniform(UInt32(abs(self))))
+        } else {
+            return 0
+        }
+    }
+}
