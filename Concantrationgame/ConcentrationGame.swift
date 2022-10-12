@@ -7,7 +7,7 @@
 
 import Foundation //Model
 
-class ConcentrationGame {
+struct ConcentrationGame {
     private(set) var cards = [Card]()
     
     private var indexOfOneAndIfOnlyFacedUp : Int? {
@@ -31,10 +31,10 @@ class ConcentrationGame {
         }
     }
     
-    func chooseCard(at index : Int) { //Whole logic of game
+    mutating func chooseCard(at index : Int) { //Whole logic of game
         if !cards[index].isMatched {
             if let matchingIndex = indexOfOneAndIfOnlyFacedUp, matchingIndex != index {
-                if cards[matchingIndex].identifier == cards[index].identifier {
+                if cards[matchingIndex] == cards[index] {
                     cards[matchingIndex].isMatched = true
                     cards[index].isMatched = true
                 }
