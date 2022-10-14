@@ -14,10 +14,20 @@ class ViewController: UIViewController {
     var NumberOfPairedCards : Int {
         return (buttonColl.count + 1) / 2
     }
+    
+    private func updateTouches() {
+        let attributes : [NSAttributedString.Key : Any] = [
+            .strokeWidth : 5.0,
+            .strokeColor : UIColor.red
+        ]
+        let attriburedString = NSAttributedString (string: "Touches: \(touches) ", attributes: attributes)
+        
+        touchLabel.attributedText = attriburedString
+    }
      
     private(set) var touches = 0 {
         didSet {
-            touchLabel.text = "Touches: \(touches) "
+             updateTouches()
         }
     }
     
@@ -43,15 +53,17 @@ class ViewController: UIViewController {
 //        UIImage(named: "logo5")!          |
 //    ]                                     |
 //__________________________________________|
-    private var emojiCollection = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨"]
+   // private var emojiCollection = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨"]
+    private var emojiCollection = "🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨"
     
-    private var emojiDictionary = [Int : String]()
+    private var emojiDictionary = [Card : String]()
     
     private func emojiIdentifier(for card: Card) -> String {
-        if emojiDictionary[card.identifier] == nil {
-            emojiDictionary[card.identifier] = emojiCollection.remove(at: emojiCollection.count.arc4randomExtension)
+        if emojiDictionary[card] == nil { 
+            let randomStringIndex = emojiCollection.index(emojiCollection.startIndex, offsetBy: emojiCollection.count.arc4randomExtension)
+            emojiDictionary[card] = String(emojiCollection.remove(at: randomStringIndex))
         }
-        return emojiDictionary[card.identifier] ?? "?"
+        return emojiDictionary[card] ?? "?"
     }
     
     private func updateViewFromModel() {
@@ -71,7 +83,11 @@ class ViewController: UIViewController {
     
     
     @IBOutlet private var buttonColl: [UIButton]!
-    @IBOutlet private weak var touchLabel: UILabel!
+    @IBOutlet private weak var touchLabel: UILabel! {
+        didSet {
+            updateTouches()
+        }
+    }
     @IBAction private  func buttonAction(_ sender: UIButton) {
         touches += 1
         if let buttonIndex = buttonColl.firstIndex(of: sender) {
