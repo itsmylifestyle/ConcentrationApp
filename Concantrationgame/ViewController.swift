@@ -5,7 +5,7 @@
 //  Created by khandevy on 22.09.2022.
 //
 
-import UIKit //Controller
+import UIKit //Controllers
 
 class ViewController: UIViewController {
     
