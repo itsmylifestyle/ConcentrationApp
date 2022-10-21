@@ -28,6 +28,7 @@ struct ConcentrationGame {
 //            return foundIndex
             
             //that means
+            //no
         }
         set {
             for index in cards.indices {
