@@ -26,6 +26,8 @@ struct ConcentrationGame {
 //                }
 //            }
 //            return foundIndex
+            
+            //that means
         }
         set {
             for index in cards.indices {
